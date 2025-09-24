@@ -1,0 +1,7 @@
+<h1><%= @challenge.name %></h1>
+
+<%= raw(render_markdown(@challenge.content)) %>
+
+<%= link_to "Ask for help", new_challenge_message_path(@challenge), class: "btn btn-primary" %>
+
+<%= link_to "View messages", challenge_messages_path(@challenge), class: "link-secondary" %>

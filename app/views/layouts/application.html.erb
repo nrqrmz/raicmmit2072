@@ -12,9 +12,24 @@
 
   <body>
     <%= render "shared/navbar" %>
-    <div class="container my-4">
-      <%= render "shared/flashes" %>
-      <%= yield %>
+    <div class="container-fluid">
+      <div class="row" data-controller="toggle">
+        <nav class="col-md-2 sidebar pt-3" data-toggle-target="hideable">
+          <%= render "shared/sidenav", challenges: @challenges %>
+        </nav>
+        <div class="col-md-10 my-4">
+          <%= render "shared/flashes" %>
+          <%= link_to "#",
+                      class: "nav-link text-dark d-none",
+                      data: {
+                        action: 'click->toggle#call',
+                        toggle_target: 'show'
+                      } do %>
+            <i class="fa-regular fa-square-caret-right"></i>
+          <% end %>
+          <%= yield %>
+        </div>
+      </div>
     </div>
   </body>
 </html>

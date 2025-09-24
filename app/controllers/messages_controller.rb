@@ -49,6 +49,19 @@ class MessagesController < ApplicationController
       send_question(model: "gemini-2.0-flash", with: { pdf: @message.file.url })
     elsif file.image?
       send_question(model: "gpt-4o", with: { image: @message.file.url })
+    elsif file.audio?
+      @ruby_llm_chat = RubyLLM.chat(model: "gpt-4o-audio-preview") # audio-capable model
+      Dir.mktmpdir do |dir|
+        require 'open-uri'
+        temp_file_path = File.join(dir, @message.file.filename.to_s)
+
+        URI.open(@message.file.url) do |remote_file|
+          File.open(temp_file_path, 'wb') do |file|
+            file.write(remote_file.read)
+          end
+        end
+        @response = @ruby_llm_chat.ask(@message.content, with: {audio: temp_file_path})
+      end
     end
   end
 
